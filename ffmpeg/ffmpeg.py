@@ -191,27 +191,3 @@ class FFmpeg:
         print(run)
 
         subprocess.run(run)
-
-    
-
-ffmpeg = FFmpeg(['test/input.mkv', 'test/input2.mkv'], 'test/dist', 'output.mkv')
-# ffmpeg.add_subtitle('test/subtitle.ass')
-# ffmpeg.add_subtitle('test/subttle2.ass')
-# videos = ffmpeg.get_source_videos()
-# audios = ffmpeg.get_source_audios()
-
-# ffmpeg.select_videos([
-#     videos[0]['index']
-# ])
-
-# ffmpeg.select_audios([
-#     audios[0]['index']
-# ])
-
-# ffmpeg.x265(True)
-
-# ffmpeg.set_threads(4)
-
-# ffmpeg.set_scale('1080')
-
-ffmpeg.concat()
