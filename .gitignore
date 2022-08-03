@@ -1,3 +1,4 @@
 test/
 venv/
 ffmpeg_runner/
+inputs.txt

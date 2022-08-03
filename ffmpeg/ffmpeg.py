@@ -17,6 +17,7 @@ class FFmpeg:
     __audios = []
     __subtitles = []
     __scale = None
+    __tune = 'film'
 
     def __init__(self, input_file, output_path, output_name):
         self.__input_file = input_file
@@ -75,6 +76,16 @@ class FFmpeg:
 
         self.__scale = scale
 
+    def set_tune(self, tune):
+        if tune not in ['film', 'animation', 'grain', 'stillimage', 'fastdecode', 'zerolatency', 'psnr', 'ssim']:
+            print('Invalid tune')
+            return
+
+        self.__tune = tune
+
+    def get_tune(self):
+        return self.__tune
+
     def select_videos(self, indexes):
         self.__videos = indexes
 
@@ -115,7 +126,13 @@ class FFmpeg:
             '-crf',
             f'{self.__crf}',
             '-preset',
-            f'{self.__preset}'
+            f'{self.__preset}',
+            '-tune',
+            f'{self.__tune}',
+            '-c:a',
+            'aac',
+            '-b:a',
+            '128k'
         ]
 
         if(self.__x265):
@@ -172,21 +189,25 @@ class FFmpeg:
         if not os.path.exists(self.__output_path):
             os.mkdir(self.__output_path)
 
-        inputes = ''
-
-        for input in self.__input_file:
-            inputes += f'{input}|'
-
-        inputes = inputes[:-1]
+        file = open(f"./inputs.txt", "w")
+        file.write(f"file {self.__input_file[0]}\nfile {self.__input_file[1]}")
+        file.close()
 
         run = [
             'ffmpeg_runner/ffmpeg-5.0.1-essentials_build/bin/ffmpeg', 
             '-y',
+            '-f',
+            'concat',
             '-i',
-            f'concat:{inputes}',
+            f'./inputs.txt',
+            '-segment_time_metadata',
+            '1',
+            '-vf',
+            'select=concatdec_select',
+            '-af',
+            'aselect=concatdec_select,aresample=async=1',
+            f'{self.__output_path}/{self.__output_name}'
         ]
-
-        run.extend(['-c', 'copy', f'{self.__output_path}/{self.__output_name}'])
 
         print(run)
 
