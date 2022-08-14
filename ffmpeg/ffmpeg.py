@@ -2,6 +2,7 @@ import json
 import os
 import platform
 import zipfile
+import tarfile
 import subprocess
 
 class FFmpeg:
@@ -33,12 +34,20 @@ class FFmpeg:
     def __ffmpeg_donwload(self):
         os_name = platform.system()
         print(f'OS: {os_name}')
-        print('Downloading ffmpeg...')
-        if not os.path.exists('ffmpeg-5.0.1-essentials_build.zip'):
-            os.system('curl https://www.gyan.dev/ffmpeg/builds/packages/ffmpeg-5.0.1-essentials_build.zip -O ffmpeg-5.0.1-essentials_build.zip')
-        with zipfile.ZipFile('ffmpeg-5.0.1-essentials_build.zip', 'r') as zip_ref:
-            zip_ref.extractall('ffmpeg_runner')
-        os.remove('ffmpeg-5.0.1-essentials_build.zip')
+        if os_name == 'Windows':
+            print('Downloading ffmpeg...')
+            if not os.path.exists('ffmpeg-5.0.1-essentials_build.zip'):
+                os.system('curl https://www.gyan.dev/ffmpeg/builds/packages/ffmpeg-5.0.1-essentials_build.zip -O ffmpeg-5.0.1-essentials_build.zip')
+            with zipfile.ZipFile('ffmpeg-5.0.1-essentials_build.zip', 'r') as zip_ref:
+                zip_ref.extractall('ffmpeg_runner')
+            os.remove('ffmpeg-5.0.1-essentials_build.zip')
+        elif os_name == 'Linux':
+            print('Downloading ffmpeg...')
+            if not os.path.exists('ffmpeg-5.0.1-essentials_build.zip'):
+                os.system('curl https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz -O ffmpeg-5.0.1-essentials_build.tar.xz')
+            with tarfile.TarFile('ffmpeg-5.0.1-essentials_build.tar.xz', 'r') as tar_ref:
+                tar_ref.extractall('ffmpeg_runner')
+            os.remove('ffmpeg-5.0.1-essentials_build.tar.xz')
 
     def set_threads(self, count):
         self.__threads = count
