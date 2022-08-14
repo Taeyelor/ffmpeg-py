@@ -34,12 +34,14 @@ class FFmpeg:
         os_name = platform.system()
         print(f'OS: {os_name}')
         if os_name == 'Windows':
+            print('Downloading ffmpeg...')
             if not os.path.exists('ffmpeg-5.0.1-essentials_build.zip'):
                 os.system('curl https://www.gyan.dev/ffmpeg/builds/packages/ffmpeg-5.0.1-essentials_build.zip -O ffmpeg-5.0.1-essentials_build.zip')
             with zipfile.ZipFile('ffmpeg-5.0.1-essentials_build.zip', 'r') as zip_ref:
                 zip_ref.extractall('ffmpeg_runner')
             os.remove('ffmpeg-5.0.1-essentials_build.zip')
         if os_name == 'Linux':
+            print('Downloading ffmpeg...')
             if not os.path.exists('ffmpeg-5.0.1-essentials_build.zip'):
                 os.system('curl https://www.gyan.dev/ffmpeg/builds/packages/ffmpeg-5.0.1-essentials_build.zip -O ffmpeg-5.0.1-essentials_build.zip')
             with zipfile.ZipFile('ffmpeg-5.0.1-essentials_build.zip', 'r') as zip_ref:
