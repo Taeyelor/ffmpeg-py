@@ -1,4 +1,8 @@
 test/
 venv/
 ffmpeg_runner/
+ffmpeg.egg-info/
+__pycache__/
+build/
+
 inputs.txt
