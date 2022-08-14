@@ -45,7 +45,7 @@ class FFmpeg:
             print('Downloading ffmpeg...')
             if not os.path.exists('ffmpeg-5.0.1-essentials_build.zip'):
                 os.system('curl https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz -O ffmpeg-release-amd64-static.tar.xz')
-            with tarfile.TarFile('ffmpeg-release-amd64-static.tar.xz', 'r') as tar_ref:
+            with tarfile.open('ffmpeg-release-amd64-static.tar.xz') as tar_ref:
                 tar_ref.extractall('ffmpeg_runner')
             os.remove('ffmpeg-release-amd64-static.tar.xz')
 
