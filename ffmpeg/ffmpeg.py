@@ -19,6 +19,8 @@ class FFmpeg:
     __subtitles = []
     __scale = None
     __tune = 'film'
+    __ffmpeg_file = ''
+    __ffprobe_file= ''
 
     def __init__(self, input_file, output_path, output_name):
         self.__input_file = input_file
@@ -41,6 +43,8 @@ class FFmpeg:
             with zipfile.ZipFile('ffmpeg-5.0.1-essentials_build.zip', 'r') as zip_ref:
                 zip_ref.extractall('ffmpeg_runner')
             os.remove('ffmpeg-5.0.1-essentials_build.zip')
+            self.__ffmpeg_file = 'ffmpeg_runner/ffmpeg-5.0.1-essentials_build/bin/ffmpeg'
+            self.__ffprobe_file = 'ffmpeg_runner/ffmpeg-5.0.1-essentials_build/bin/ffprobe'
         elif os_name == 'Linux':
             print('Downloading ffmpeg...')
             if not os.path.exists('ffmpeg-5.0.1-essentials_build.zip'):
@@ -48,6 +52,8 @@ class FFmpeg:
             with tarfile.open('ffmpeg-release-amd64-static.tar.xz') as tar_ref:
                 tar_ref.extractall('ffmpeg_runner')
             os.remove('ffmpeg-release-amd64-static.tar.xz')
+            self.__ffmpeg_file = 'ffmpeg_runner/ffmpeg-5.0.1-amd64-static/ffmpeg'
+            self.__ffprobe_file = 'ffmpeg_runner/ffmpeg-5.0.1-amd64-static/ffprobe'
 
     def set_threads(self, count):
         self.__threads = count
@@ -108,16 +114,16 @@ class FFmpeg:
         self.__x265 = activate
 
     def get_source_subtitles(self):
-        map = subprocess.Popen(['ffmpeg_runner/ffmpeg-5.0.1-essentials_build/bin/ffprobe', '-select_streams', 's', '-show_entries', 'stream=index:stream_tags', '-of', 'json', self.__input_file[0]], stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+        map = subprocess.Popen([self.__ffprobe, '-select_streams', 's', '-show_entries', 'stream=index:stream_tags', '-of', 'json', self.__input_file[0]], stderr=subprocess.PIPE, stdout=subprocess.PIPE)
         return json.loads(map.stdout.read())['streams']
 
     def get_source_audios(self):
-        map = subprocess.Popen(['ffmpeg_runner/ffmpeg-5.0.1-essentials_build/bin/ffprobe', '-select_streams', 'a', '-show_entries', 'stream=index:stream_tags', '-of', 'json', self.__input_file[0]], stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+        map = subprocess.Popen([self.__ffprobe, '-select_streams', 'a', '-show_entries', 'stream=index:stream_tags', '-of', 'json', self.__input_file[0]], stderr=subprocess.PIPE, stdout=subprocess.PIPE)
         return json.loads(map.stdout.read())['streams']
 
     def get_source_videos(self):
         print('Videos:')
-        map = subprocess.Popen(['ffmpeg_runner/ffmpeg-5.0.1-essentials_build/bin/ffprobe', '-select_streams', 'v', '-show_entries', 'stream=index:stream_tags', '-of', 'json', self.__input_file[0]], stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+        map = subprocess.Popen([self.__ffprobe, '-select_streams', 'v', '-show_entries', 'stream=index:stream_tags', '-of', 'json', self.__input_file[0]], stderr=subprocess.PIPE, stdout=subprocess.PIPE)
         return json.loads(map.stdout.read())['streams']
 
     def encoding(self):
@@ -128,7 +134,7 @@ class FFmpeg:
             os.mkdir(self.__output_path)
 
         run = [
-            'ffmpeg_runner/ffmpeg-5.0.1-essentials_build/bin/ffmpeg', 
+            self.__ffmpeg, 
             '-y',
             '-i',
             f'{self.__input_file[0]}', 
@@ -203,7 +209,7 @@ class FFmpeg:
         file.close()
 
         run = [
-            'ffmpeg_runner/ffmpeg-5.0.1-essentials_build/bin/ffmpeg', 
+            self.__ffmpeg, 
             '-y',
             '-f',
             'concat',
