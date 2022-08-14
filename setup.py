@@ -13,7 +13,7 @@ with open("requirements.txt", encoding="utf-8") as r:
 
 
 setup(
-    name="ffmpeg-py",
+    name="ffmpeg",
     packages=["ffmpeg"],
     version="1.0.0",
     author="Taeyelor",
