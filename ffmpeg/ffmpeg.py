@@ -114,16 +114,16 @@ class FFmpeg:
         self.__x265 = activate
 
     def get_source_subtitles(self):
-        map = subprocess.Popen([self.__ffprobe, '-select_streams', 's', '-show_entries', 'stream=index:stream_tags', '-of', 'json', self.__input_file[0]], stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+        map = subprocess.Popen([self.__ffprobe_file, '-select_streams', 's', '-show_entries', 'stream=index:stream_tags', '-of', 'json', self.__input_file[0]], stderr=subprocess.PIPE, stdout=subprocess.PIPE)
         return json.loads(map.stdout.read())['streams']
 
     def get_source_audios(self):
-        map = subprocess.Popen([self.__ffprobe, '-select_streams', 'a', '-show_entries', 'stream=index:stream_tags', '-of', 'json', self.__input_file[0]], stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+        map = subprocess.Popen([self.__ffprobe_file, '-select_streams', 'a', '-show_entries', 'stream=index:stream_tags', '-of', 'json', self.__input_file[0]], stderr=subprocess.PIPE, stdout=subprocess.PIPE)
         return json.loads(map.stdout.read())['streams']
 
     def get_source_videos(self):
         print('Videos:')
-        map = subprocess.Popen([self.__ffprobe, '-select_streams', 'v', '-show_entries', 'stream=index:stream_tags', '-of', 'json', self.__input_file[0]], stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+        map = subprocess.Popen([self.__ffprobe_file, '-select_streams', 'v', '-show_entries', 'stream=index:stream_tags', '-of', 'json', self.__input_file[0]], stderr=subprocess.PIPE, stdout=subprocess.PIPE)
         return json.loads(map.stdout.read())['streams']
 
     def encoding(self):
@@ -134,7 +134,7 @@ class FFmpeg:
             os.mkdir(self.__output_path)
 
         run = [
-            self.__ffmpeg, 
+            self.__ffmpeg_file, 
             '-y',
             '-i',
             f'{self.__input_file[0]}', 
@@ -209,7 +209,7 @@ class FFmpeg:
         file.close()
 
         run = [
-            self.__ffmpeg, 
+            self.__ffmpeg_file, 
             '-y',
             '-f',
             'concat',
