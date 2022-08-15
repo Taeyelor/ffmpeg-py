@@ -27,13 +27,15 @@ class FFmpeg:
         self.__output_path = output_path
         self.__output_name = output_name
 
-    def __ffmpeg_check(self):
+    @staticmethod
+    def __ffmpeg_check():
         if os.path.exists('ffmpeg_runner'):
             return True
 
         return False
 
-    def __ffmpeg_donwload(self):
+    @staticmethod
+    def __ffmpeg_donwload():
         os_name = platform.system()
         print(f'OS: {os_name}')
         if os_name == 'Windows':
@@ -43,8 +45,8 @@ class FFmpeg:
             with zipfile.ZipFile('ffmpeg-5.0.1-essentials_build.zip', 'r') as zip_ref:
                 zip_ref.extractall('ffmpeg_runner')
             os.remove('ffmpeg-5.0.1-essentials_build.zip')
-            self.__ffmpeg_file = 'ffmpeg_runner/ffmpeg-5.0.1-essentials_build/bin/ffmpeg'
-            self.__ffprobe_file = 'ffmpeg_runner/ffmpeg-5.0.1-essentials_build/bin/ffprobe'
+            FFmpeg.__ffmpeg_file = 'ffmpeg_runner/ffmpeg-5.0.1-essentials_build/bin/ffmpeg'
+            FFmpeg.__ffprobe_file = 'ffmpeg_runner/ffmpeg-5.0.1-essentials_build/bin/ffprobe'
             print('Download complete.')
         elif os_name == 'Linux':
             print('Downloading ffmpeg...')
@@ -53,14 +55,15 @@ class FFmpeg:
             with tarfile.open('ffmpeg-release-amd64-static.tar.xz') as tar_ref:
                 tar_ref.extractall('ffmpeg_runner')
             os.remove('ffmpeg-release-amd64-static.tar.xz')
-            self.__ffmpeg_file = 'ffmpeg_runner/ffmpeg-5.0.1-amd64-static/ffmpeg'
-            self.__ffprobe_file = 'ffmpeg_runner/ffmpeg-5.0.1-amd64-static/ffprobe'
+            FFmpeg.__ffmpeg_file = 'ffmpeg_runner/ffmpeg-5.0.1-amd64-static/ffmpeg'
+            FFmpeg.__ffprobe_file = 'ffmpeg_runner/ffmpeg-5.0.1-amd64-static/ffprobe'
             print('Download complete.')
 
 
-    def ffmpeg_exists(self):
-        if not self.__ffmpeg_check():
-            self.__ffmpeg_donwload()
+    @staticmethod
+    def ffmpeg_exists():
+        if not FFmpeg.__ffmpeg_check():
+            FFmpeg.__ffmpeg_donwload()
 
     def set_threads(self, count):
         self.__threads = count
