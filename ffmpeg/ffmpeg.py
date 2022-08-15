@@ -45,6 +45,7 @@ class FFmpeg:
             os.remove('ffmpeg-5.0.1-essentials_build.zip')
             self.__ffmpeg_file = 'ffmpeg_runner/ffmpeg-5.0.1-essentials_build/bin/ffmpeg'
             self.__ffprobe_file = 'ffmpeg_runner/ffmpeg-5.0.1-essentials_build/bin/ffprobe'
+            print('Download complete.')
         elif os_name == 'Linux':
             print('Downloading ffmpeg...')
             if not os.path.exists('ffmpeg-5.0.1-essentials_build.zip'):
@@ -54,6 +55,8 @@ class FFmpeg:
             os.remove('ffmpeg-release-amd64-static.tar.xz')
             self.__ffmpeg_file = 'ffmpeg_runner/ffmpeg-5.0.1-amd64-static/ffmpeg'
             self.__ffprobe_file = 'ffmpeg_runner/ffmpeg-5.0.1-amd64-static/ffprobe'
+            print('Download complete.')
+
 
     def set_threads(self, count):
         self.__threads = count
@@ -193,8 +196,6 @@ class FFmpeg:
         
         run.append(f'{self.__output_path}/{self.__output_name}')
 
-        print(run)
-
         subprocess.run(run)
 
     def concat(self):
@@ -223,7 +224,5 @@ class FFmpeg:
             'aselect=concatdec_select,aresample=async=1',
             f'{self.__output_path}/{self.__output_name}'
         ]
-
-        print(run)
 
         subprocess.run(run)
