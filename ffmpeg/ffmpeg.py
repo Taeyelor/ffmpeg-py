@@ -58,6 +58,10 @@ class FFmpeg:
             print('Download complete.')
 
 
+    def ffmpeg_exists(self):
+        if not self.__ffmpeg_check():
+            self.__ffmpeg_donwload()
+
     def set_threads(self, count):
         self.__threads = count
 
