@@ -217,6 +217,7 @@ class FFmpeg:
                 run.extend(['-map', f'0:{self.__audios[i]}'])
 
         run.extend(['-threads', f'{self.__threads}'])
+        run.extend(['-progress', '-nostats'])
 
         run.append(f'"{self.__output_path}/{self.__output_name}"')
 
@@ -246,6 +247,7 @@ class FFmpeg:
             'select=concatdec_select',
             '-af',
             'aselect=concatdec_select,aresample=async=1',
+            '-progress', '-nostats',
             f'"{self.__output_path}/{self.__output_name}"'
         ]
 
