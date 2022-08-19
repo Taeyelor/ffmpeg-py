@@ -153,7 +153,7 @@ class FFmpeg:
                                '-of', 'json', self.__input_file[0]], stderr=subprocess.PIPE, stdout=subprocess.PIPE)
         return json.loads(map.stdout.read())['streams']
 
-    def encoding(self, output_file):
+    def encoding(self):
         if not self.__ffmpeg_check():
             self.__ffmpeg_donwload()
 
