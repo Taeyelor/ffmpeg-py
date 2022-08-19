@@ -164,7 +164,7 @@ class FFmpeg:
             self.ffmpeg_file,
             '-y',
             '-i',
-            f'{self.__input_file[0]}',
+            f'"{self.__input_file[0]}"',
             '-crf',
             f'{self.__crf}',
             '-preset',
@@ -189,10 +189,10 @@ class FFmpeg:
 
             ass = ass[:-1]
 
-            run.append(ass)
+            run.append(f"'{ass}'")
 
         if self.__scale is not None and len(self.__subtitle_file) == 0:
-            run.extend(['-vf', f'scale={self.__scale}:trunc(ow/a/2)*2'])
+            run.extend(['-vf', f'"scale={self.__scale}:trunc(ow/a/2)*2"'])
 
         if self.__scale is not None and len(self.__subtitle_file) > 0:
             ass = ''
@@ -202,7 +202,8 @@ class FFmpeg:
 
             ass = ass[:-1]
 
-            run.extend(['-vf', f"scale={self.__scale}:trunc(ow/a/2)*2,{ass}"])
+            run.extend(
+                ['-vf', f"'scale={self.__scale}:trunc(ow/a/2)*2,{ass}'"])
         if len(self.__videos) > 0:
             for i in range(0, len(self.__videos)):
                 run.extend(['-map', f'0:{self.__videos[i]}'])
@@ -217,7 +218,7 @@ class FFmpeg:
 
         run.extend(['-threads', f'{self.__threads}'])
 
-        run.append(f'{self.__output_path}/{self.__output_name}')
+        run.append(f'"{self.__output_path}/{self.__output_name}"')
 
         self.run = run
 
@@ -245,7 +246,7 @@ class FFmpeg:
             'select=concatdec_select',
             '-af',
             'aselect=concatdec_select,aresample=async=1',
-            f'{self.__output_path}/{self.__output_name}'
+            f'"{self.__output_path}/{self.__output_name}"'
         ]
 
         self.run = run
