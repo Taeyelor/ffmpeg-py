@@ -255,4 +255,4 @@ class FFmpeg:
             subprocess.run(self.run)
         else:
             import IPython
-            IPython.get_ipython().run_cell(' '.join(self.run))
+            IPython.get_ipython().run_cell(f"""!{' '.join(self.run)}""")
