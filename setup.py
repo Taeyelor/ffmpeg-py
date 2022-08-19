@@ -11,11 +11,10 @@ with open("requirements.txt", encoding="utf-8") as r:
     requires = [i.strip() for i in r]
 
 
-
 setup(
     name="ffmpeg",
     packages=["ffmpeg"],
-    version="1.0.0",
+    version="1.0.1",
     author="Taeyelor",
     author_email="taeyelor@gmail.com",
     url="https://github.com/taeyelor/py-ffmpeg",
