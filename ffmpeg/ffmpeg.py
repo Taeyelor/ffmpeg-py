@@ -27,6 +27,10 @@ class FFmpeg:
         self.__input_file = input_file
         self.__output_path = output_path
         self.__output_name = output_name
+        self.__subtitle_file = []
+        self.__videos = []
+        self.__audios = []
+        self.__subtitles = []
 
     @staticmethod
     def __ffmpeg_check():
