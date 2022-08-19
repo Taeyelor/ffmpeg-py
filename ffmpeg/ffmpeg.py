@@ -214,9 +214,14 @@ class FFmpeg:
 
         run.append(f'{self.__output_path}/{self.__output_name}')
 
-        with subprocess.Popen(run, stdout=subprocess.PIPE, bufsize=1, universal_newlines=True) as p:
+        with subprocess.Popen(run, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1, universal_newlines=True) as p:
             while True:
                 line = p.stdout.readline()
+                if not line:
+                    break
+                print(line)
+            while True:
+                line = p.stderr.readline()
                 if not line:
                     break
                 print(line)
@@ -251,6 +256,11 @@ class FFmpeg:
         with subprocess.Popen(run, stdout=subprocess.PIPE, bufsize=1, universal_newlines=True) as p:
             while True:
                 line = p.stdout.readline()
+                if not line:
+                    break
+                print(line)
+            while True:
+                line = p.stderr.readline()
                 if not line:
                     break
                 print(line)
