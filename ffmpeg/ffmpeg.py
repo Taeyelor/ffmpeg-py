@@ -15,6 +15,7 @@ class FFmpeg:
     __crf = 22
     __preset = 'medium'
     __x265 = False
+    __x264 = False
     __videos = []
     __audios = []
     __subtitles = []
@@ -23,6 +24,7 @@ class FFmpeg:
     ffmpeg_file = ''
     ffprobe_file = ''
     __run = []
+    __gpu = False
 
     def __init__(self, input_file, output_path, output_name):
         self.__input_file = input_file
@@ -143,6 +145,12 @@ class FFmpeg:
     def x265(self, activate: bool):
         self.__x265 = activate
 
+    def x264(self, activate: bool):
+        self.__x264 = activate
+
+    def gpu(self, activate: bool):
+        self.__gpu = activate
+
     def get_source_subtitles(self):
         map = subprocess.Popen([self.ffprobe_file, '-select_streams', 's', '-show_entries', 'stream=index:stream_tags',
                                '-of', 'json', self.__input_file[0]], stderr=subprocess.PIPE, stdout=subprocess.PIPE)
@@ -183,8 +191,13 @@ class FFmpeg:
             '128k'
         ]
 
-        if (self.__x265):
+        if self.__x265:
             run.extend(['-c:v', 'libx265'])
+
+        if self.__x264:
+            run.extend(['-c:v', 'libx264'])
+            if self.__gpu:
+                run.extend(['-x264-params', 'opencl=true'])
 
         if len(self.__subtitle_file) > 0 and self.__scale is None:
             run.append('-vf')
