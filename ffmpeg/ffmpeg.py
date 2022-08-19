@@ -113,7 +113,13 @@ class FFmpeg:
             print('Invalid scale')
             return
 
-        self.__scale = scale
+        scale_map = {
+            '360': 640,
+            '480': 854,
+            '720': 1280,
+            '1080': 1920
+        }
+        self.__scale = scale_map[scale]
 
     def set_tune(self, tune):
         if tune not in ['film', 'animation', 'grain', 'stillimage', 'fastdecode', 'zerolatency', 'psnr', 'ssim']:
