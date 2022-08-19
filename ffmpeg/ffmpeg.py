@@ -22,6 +22,7 @@ class FFmpeg:
     __tune = 'film'
     ffmpeg_file = ''
     ffprobe_file = ''
+    __run = []
 
     def __init__(self, input_file, output_path, output_name):
         self.__input_file = input_file
@@ -152,7 +153,7 @@ class FFmpeg:
                                '-of', 'json', self.__input_file[0]], stderr=subprocess.PIPE, stdout=subprocess.PIPE)
         return json.loads(map.stdout.read())['streams']
 
-    def encoding(self):
+    def encoding(self, output_file):
         if not self.__ffmpeg_check():
             self.__ffmpeg_donwload()
 
@@ -218,17 +219,7 @@ class FFmpeg:
 
         run.append(f'{self.__output_path}/{self.__output_name}')
 
-        with subprocess.Popen(run, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1, universal_newlines=True) as p:
-            while True:
-                line = p.stdout.readline()
-                if not line:
-                    break
-                print(line)
-            while True:
-                line = p.stderr.readline()
-                if not line:
-                    break
-                print(line)
+        self.run = run
 
     def concat(self):
         if not self.__ffmpeg_check():
@@ -257,14 +248,11 @@ class FFmpeg:
             f'{self.__output_path}/{self.__output_name}'
         ]
 
-        with subprocess.Popen(run, stdout=subprocess.PIPE, bufsize=1, universal_newlines=True) as p:
-            while True:
-                line = p.stdout.readline()
-                if not line:
-                    break
-                print(line)
-            while True:
-                line = p.stderr.readline()
-                if not line:
-                    break
-                print(line)
+        self.run = run
+
+    def exec(self, in_notebook=False):
+        if not in_notebook:
+            subprocess.run(self.run)
+        else:
+            import IPython
+            IPython.get_ipython().run_cell(' '.join(self.run))
