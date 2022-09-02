@@ -197,7 +197,7 @@ class FFmpeg:
         if self.__x264:
             run.extend(['-c:v', 'libx264'])
             if self.__gpu:
-                run.extend(['-x264-params', 'opencl=true'])
+                run.extend(['-x264opts', 'opencl', '-hwaccel', 'auto'])
 
         if len(self.__subtitle_file) > 0 and self.__scale is None:
             run.append('-vf')
