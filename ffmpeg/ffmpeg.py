@@ -41,11 +41,11 @@ class FFmpeg:
             if FFmpeg.ffmpeg_file == '':
                 os_name = platform.system()
                 if os_name == 'Windows':
-                    FFmpeg.ffmpeg_file = './ffmpeg_runner/ffmpeg-5.0.1-essentials_build/bin/ffmpeg'
-                    FFmpeg.ffprobe_file = './ffmpeg_runner/ffmpeg-5.0.1-essentials_build/bin/ffprobe'
+                    FFmpeg.ffmpeg_file = './ffmpeg_runner/ffmpeg-5.1.1-essentials_build/bin/ffmpeg'
+                    FFmpeg.ffprobe_file = './ffmpeg_runner/ffmpeg-5.1.1-essentials_build/bin/ffprobe'
                 elif os_name == 'Linux':
-                    FFmpeg.ffmpeg_file = './ffmpeg_runner/ffmpeg-5.0.1-amd64-static/ffmpeg'
-                    FFmpeg.ffprobe_file = './ffmpeg_runner/ffmpeg-5.0.1-amd64-static/ffprobe'
+                    FFmpeg.ffmpeg_file = './ffmpeg_runner/ffmpeg-5.1.1-amd64-static/ffmpeg'
+                    FFmpeg.ffprobe_file = './ffmpeg_runner/ffmpeg-5.1.1-amd64-static/ffprobe'
             return True
 
         return False
@@ -56,25 +56,25 @@ class FFmpeg:
         print(f'OS: {os_name}')
         if os_name == 'Windows':
             print('Downloading ffmpeg...')
-            if not os.path.exists('ffmpeg-5.0.1-essentials_build.zip'):
+            if not os.path.exists('ffmpeg-5.1.1-essentials_build.zip'):
                 os.system(
-                    'curl https://www.gyan.dev/ffmpeg/builds/packages/ffmpeg-5.0.1-essentials_build.zip -O ffmpeg-5.0.1-essentials_build.zip')
-            with zipfile.ZipFile('ffmpeg-5.0.1-essentials_build.zip', 'r') as zip_ref:
+                    'curl https://www.gyan.dev/ffmpeg/builds/packages/ffmpeg-5.1.1-essentials_build.zip -O ffmpeg-5.1.1-essentials_build.zip')
+            with zipfile.ZipFile('ffmpeg-5.1.1-essentials_build.zip', 'r') as zip_ref:
                 zip_ref.extractall('ffmpeg_runner')
             os.remove('ffmpeg-5.0.1-essentials_build.zip')
-            FFmpeg.ffmpeg_file = './ffmpeg_runner/ffmpeg-5.0.1-essentials_build/bin/ffmpeg'
-            FFmpeg.ffprobe_file = './ffmpeg_runner/ffmpeg-5.0.1-essentials_build/bin/ffprobe'
+            FFmpeg.ffmpeg_file = './ffmpeg_runner/ffmpeg-5.1.1-essentials_build/bin/ffmpeg'
+            FFmpeg.ffprobe_file = './ffmpeg_runner/ffmpeg-5.1.1-essentials_build/bin/ffprobe'
             print('Download complete.')
         elif os_name == 'Linux':
             print('Downloading ffmpeg...')
-            if not os.path.exists('ffmpeg-5.0.1-essentials_build.zip'):
+            if not os.path.exists('ffmpeg-5.1.1-essentials_build.zip'):
                 os.system(
                     'curl https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz -O ffmpeg-release-amd64-static.tar.xz')
             with tarfile.open('ffmpeg-release-amd64-static.tar.xz') as tar_ref:
                 tar_ref.extractall('ffmpeg_runner')
             os.remove('ffmpeg-release-amd64-static.tar.xz')
-            FFmpeg.ffmpeg_file = './ffmpeg_runner/ffmpeg-5.0.1-amd64-static/ffmpeg'
-            FFmpeg.ffprobe_file = './ffmpeg_runner/ffmpeg-5.0.1-amd64-static/ffprobe'
+            FFmpeg.ffmpeg_file = './ffmpeg_runner/ffmpeg-5.1.1-amd64-static/ffmpeg'
+            FFmpeg.ffprobe_file = './ffmpeg_runner/ffmpeg-5.1.1-amd64-static/ffprobe'
             print('Download complete.')
 
     @staticmethod
@@ -187,6 +187,8 @@ class FFmpeg:
             f'{self.__preset}',
             '-tune',
             f'{self.__tune}',
+            '-pix_fmt',
+            'yuv420p10le',
             '-c:a',
             'aac',
             '-b:a',
