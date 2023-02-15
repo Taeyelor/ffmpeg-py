@@ -181,12 +181,11 @@ class FFmpeg:
         run = []
 
         if colab_ffmpeg:
-            run[0] = 'ffmpeg'
+            run.append('ffmpeg')
         else:
-            run[0] = self.ffmpeg_file
+            run.append(self.ffmpeg_file)
 
-        run = [
-            '-y',
+        run.extend( '-y',
             '-hwaccel',
             'auto',
             '-i',
@@ -202,8 +201,7 @@ class FFmpeg:
             '-c:a',
             'aac',
             '-b:a',
-            '128k'
-        ]
+            '128k')
 
         if self.__x265:
             run.extend(['-c:v', 'libx265'])
