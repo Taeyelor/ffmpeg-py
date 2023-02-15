@@ -16,6 +16,7 @@ class FFmpeg:
     __preset = 'medium'
     __x265 = False
     __x264 = False
+    __h265 = False
     __videos = []
     __audios = []
     __subtitles = []
@@ -148,6 +149,9 @@ class FFmpeg:
     def x264(self, activate: bool):
         self.__x264 = activate
 
+    def h265(self, activate: bool):
+        self.__h265 = activate
+
     def gpu(self, activate: bool):
         self.__gpu = activate
 
@@ -202,6 +206,9 @@ class FFmpeg:
             run.extend(['-c:v', 'libx264'])
             if self.__gpu:
                 run.extend(['-x264opts', 'opencl'])
+        
+        if self.__h265:
+            run.extend(['-c:v', 'hevc_nvenc'])
 
         if len(self.__subtitle_file) > 0 and self.__scale is None:
             run.append('-vf')
