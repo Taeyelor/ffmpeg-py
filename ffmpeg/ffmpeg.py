@@ -172,7 +172,7 @@ class FFmpeg:
         return json.loads(map.stdout.read())['streams']
 
     def encoding(self, colab_ffmpeg = False):
-        if not self.__ffmpeg_check():
+        if colab_ffmpeg == False and not self.__ffmpeg_check():
             self.__ffmpeg_donwload()
 
         if not os.path.exists(self.__output_path):
