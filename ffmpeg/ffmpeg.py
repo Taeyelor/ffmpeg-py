@@ -185,23 +185,7 @@ class FFmpeg:
         else:
             run.append(self.ffmpeg_file)
 
-        run.extend(['-y',
-            '-hwaccel',
-            'auto',
-            '-i',
-            f'"{self.__input_file[0]}"',
-            '-crf',
-            f'{self.__crf}',
-            '-preset',
-            f'{self.__preset}',
-            '-tune',
-            f'{self.__tune}',
-            '-pix_fmt',
-            'yuv420p10le',
-            '-c:a',
-            'aac',
-            '-b:a',
-            '128k'])
+        run.extend(['-y', '-hwaccel', 'auto', '-i', f'"{self.__input_file[0]}"', '-crf', f'{self.__crf}', '-preset', f'{self.__preset}', '-tune', f'{self.__tune}','-pix_fmt', 'yuv420p10le', '-c:a', 'aac', '-b:a', '128k'])
 
         if self.__x265:
             run.extend(['-c:v', 'libx265'])
