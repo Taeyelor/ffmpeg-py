@@ -171,15 +171,21 @@ class FFmpeg:
                                '-of', 'json', self.__input_file[0]], stderr=subprocess.PIPE, stdout=subprocess.PIPE)
         return json.loads(map.stdout.read())['streams']
 
-    def encoding(self):
+    def encoding(self, colab_ffmpeg = False):
         if not self.__ffmpeg_check():
             self.__ffmpeg_donwload()
 
         if not os.path.exists(self.__output_path):
             os.mkdir(self.__output_path)
 
+        run = []
+
+        if colab_ffmpeg:
+            run[0] = 'ffmpeg'
+        else:
+            run[0] = self.ffmpeg_file
+
         run = [
-            self.ffmpeg_file,
             '-y',
             '-hwaccel',
             'auto',
