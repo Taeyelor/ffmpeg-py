@@ -27,6 +27,7 @@ class FFmpeg:
     __run = []
     __gpu = False
     __fps = 30
+    __two_pass = False
 
     def __init__(self, input_file, output_path, output_name):
         self.__input_file = input_file
@@ -107,6 +108,9 @@ class FFmpeg:
 
     def get_fps(self):
         return self.__fps
+
+    def set_two_pass(self, activate):
+        self.__two_pass = activate
 
     def set_preset(self, preset):
         if preset not in ['ultrafast', 'superfast', 'veryfast', 'faster', 'fast', 'medium', 'slow', 'slower', 'veryslow', 'placebo']:
@@ -208,6 +212,9 @@ class FFmpeg:
         if self.__h265:
             run.extend(['-c:v', 'hevc_nvenc'])
 
+            if self.__two_pass:
+                run.extend(['-rc', 'vbr'])
+
         if len(self.__subtitle_file) > 0 and self.__scale is None:
             run.append('-vf')
             ass = ''
@@ -247,7 +254,23 @@ class FFmpeg:
         run.extend(['-threads', f'{self.__threads}'])
         run.extend(['-progress', '-', '-nostats'])
 
-        run.append(f'"{self.__output_path}/{self.__output_name}"')
+        if self.__two_pass:
+            temp_run = run
+            temp_run.append('-pass')
+            temp_run.append('1')
+            temp_run.append('-f')
+            temp_run.append('null')
+            temp_run.append('/dev/null')
+            temp_run.append('&&')
+            temp_run.append('\\')
+            temp_run.extend(run)
+            temp_run.append('-pass')
+            temp_run.append('2')
+            temp_run.append('-c:a')
+            temp_run.append('copy')
+            run.append(f'"{self.__output_path}/{self.__output_name}"')
+        else:
+            run.append(f'"{self.__output_path}/{self.__output_name}"')
 
         self.run = run
 
