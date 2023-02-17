@@ -255,7 +255,7 @@ class FFmpeg:
         run.extend(['-progress', '-', '-nostats'])
 
         if self.__two_pass:
-            temp_run = run
+            temp_run = [item for item in run]
             temp_run.append('-pass')
             temp_run.append('1')
             temp_run.append('-f')
@@ -268,7 +268,8 @@ class FFmpeg:
             temp_run.append('2')
             temp_run.append('-c:a')
             temp_run.append('copy')
-            run.append(f'"{self.__output_path}/{self.__output_name}"')
+            temp_run.append(f'"{self.__output_path}/{self.__output_name}"')
+            run = temp_run
         else:
             run.append(f'"{self.__output_path}/{self.__output_name}"')
 
