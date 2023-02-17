@@ -26,6 +26,7 @@ class FFmpeg:
     ffprobe_file = ''
     __run = []
     __gpu = False
+    __fps = 30
 
     def __init__(self, input_file, output_path, output_name):
         self.__input_file = input_file
@@ -100,6 +101,12 @@ class FFmpeg:
 
     def get_crf(self):
         return self.__crf
+
+    def set_fps(self, fps):
+        self.__fps = fps
+
+    def get_fps(self):
+        return self.__fps
 
     def set_preset(self, preset):
         if preset not in ['ultrafast', 'superfast', 'veryfast', 'faster', 'fast', 'medium', 'slow', 'slower', 'veryslow', 'placebo']:
@@ -185,7 +192,7 @@ class FFmpeg:
         else:
             run.append(self.ffmpeg_file)
 
-        args = ['-y', '-hwaccel', 'auto', '-i', f'"{self.__input_file[0]}"', '-crf', f'{self.__crf}', '-preset', f'{self.__preset}', '-tune', f'{self.__tune}','-pix_fmt', 'yuv420p10le', '-c:a', 'aac', '-b:a', '128k']
+        args = ['-y', '-hwaccel', 'auto', '-i', f'"{self.__input_file[0]}"', '-crf', f'{self.__crf}', '-preset', f'{self.__preset}', '-tune', f'{self.__tune}','-pix_fmt', 'yuv420p10le', '-c:a', 'aac', '-b:a', '128k', '-r', f'{self.__fps}']
 
         for item in args:
             run.append(item)

@@ -14,7 +14,7 @@ with open("requirements.txt", encoding="utf-8") as r:
 setup(
     name="ffmpeg",
     packages=["ffmpeg"],
-    version="1.0.7",
+    version="1.1.0",
     author="Taeyelor",
     author_email="taeyelor@gmail.com",
     url="https://github.com/taeyelor/py-ffmpeg",
