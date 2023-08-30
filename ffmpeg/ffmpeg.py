@@ -166,19 +166,33 @@ class FFmpeg:
     def gpu(self, activate: bool):
         self.__gpu = activate
 
-    def get_source_subtitles(self):
-        map = subprocess.Popen([self.ffprobe_file, '-select_streams', 's', '-show_entries', 'stream=index:stream_tags',
+    def get_source_subtitles(self, colab_ffprobe = True):
+        runner = 'ffprobe'
+
+        if colab_ffprobe == False:
+            runner = self.ffprobe_file
+        
+        map = subprocess.Popen([runner, '-select_streams', 's', '-show_entries', 'stream=index:stream_tags',
                                '-of', 'json', self.__input_file[0]], stderr=subprocess.PIPE, stdout=subprocess.PIPE)
         return json.loads(map.stdout.read())['streams']
 
-    def get_source_audios(self):
-        map = subprocess.Popen([self.ffprobe_file, '-select_streams', 'a', '-show_entries', 'stream=index:stream_tags',
+    def get_source_audios(self, colab_ffprobe = True):
+         runner = 'ffprobe'
+
+        if colab_ffprobe == False:
+            runner = self.ffprobe_file
+            
+        map = subprocess.Popen([runner, '-select_streams', 'a', '-show_entries', 'stream=index:stream_tags',
                                '-of', 'json', self.__input_file[0]], stderr=subprocess.PIPE, stdout=subprocess.PIPE)
         return json.loads(map.stdout.read())['streams']
 
-    def get_source_videos(self):
-        print('Videos:')
-        map = subprocess.Popen([self.ffprobe_file, '-select_streams', 'v', '-show_entries', 'stream=index:stream_tags',
+    def get_source_videos(self, colab_ffprobe = True):
+         runner = 'ffprobe'
+
+        if colab_ffprobe == False:
+            runner = self.ffprobe_file
+            
+        map = subprocess.Popen([runner, '-select_streams', 'v', '-show_entries', 'stream=index:stream_tags',
                                '-of', 'json', self.__input_file[0]], stderr=subprocess.PIPE, stdout=subprocess.PIPE)
         return json.loads(map.stdout.read())['streams']
 
